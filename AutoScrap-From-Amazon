@@ -1,0 +1,141 @@
+## Problem statement : in order to make a decision to buy good Mobile from  Amazon
+### For that you need WebScraping Amezon Site based on keywords mobiles, price and ratings 
+### Autoscraper is lieght-Wieght Scrapper to get the data from the website
+### to install autoscraper library
+!pip install autoscraper
+### from autoscraper import AutoScraper
+#Step1: get the Url and wante list (keywords) to get the respective data from website
+### goto amazon and search for the mobile and paste the link here for url variable 
+### for wanted_list , consider one item from the webage  and get (copy) the price and title of the item , rating for the item 
+
+amazon_url='https://www.amazon.in/s?k=iphones&ref=nb_sb_noss_2'
+wanted_list=['₹58,400','New Apple iPhone 11 (128GB) - Black','24,410']
+
+scraper=AutoScraper()
+results=scraper.build(amazon_url,wanted_list)
+print(results)
+['₹58,400', '₹59,900', '₹51,999', '₹54,900', '₹1,25,900', '₹1,29,900', '₹82,400', '₹84,900', '₹1,35,900', '₹1,39,900', '₹77,900', '₹79,900', '₹67,100', '₹69,900', '₹93,900', '₹1,23,900', '₹66,900', '₹1,15,900', '₹1,19,900', '₹81,900', '₹99,900', 'New Apple iPhone 11 (128GB) - Black', 'New Apple iPhone 11 (64GB) - Green', 'New Apple iPhone 11 (128GB) - White', 'New Apple iPhone 12 Pro Max (128GB) - Pacific Blue', 'New Apple iPhone 12 (128GB) - Blue', 'New Apple iPhone 11 (128GB) - (Product) RED', 'New Apple iPhone 11 (128GB) - Green', 'New Apple iPhone 12 Pro Max (256GB) - Graphite', 'New Apple iPhone 12 (64GB) - Blue', 'New Apple iPhone 12 Mini (64GB) - White', 'Apple iPhone 11 Pro Max (256GB) - Midnight Green', 'New Apple iPhone 12 Mini (64GB) - Blue', 'New Apple iPhone 12 (64GB) - Black', 'New Apple iPhone 12 Pro (128GB) - Pacific Blue', 'Apple iPhone 11 Pro (64GB) - Space Grey', '24,410', '491', '363', '240', '260', '744', '426', '108', '205', '855', '138']
+​
+​
+### to group the results 
+scraper.get_result_similar(amazon_url,grouped=True)
+{'rule_mlov': ['₹58,400',
+  '₹59,900',
+  '₹1,25,900',
+  '₹1,29,900',
+  '₹82,400',
+  '₹84,900',
+  '₹29,999',
+  '₹1,15,900',
+  '₹1,19,900',
+  '₹67,100',
+  '₹69,900',
+  '₹93,900',
+  '₹1,23,900',
+  '₹86,900',
+  '₹1,21,300',
+  '₹13,990',
+  '₹19,990',
+  '₹16,499',
+  '₹19,999',
+  '₹2,499',
+  '₹3,999',
+  '₹3,499',
+  '₹3,999',
+  '₹69,999',
+  '₹2,499',
+  '₹2,999',
+  '₹1,499',
+  '₹2,999'],
+ 'rule_ps8v': ['New Apple iPhone 11 (128GB) - Black',
+  'New Apple iPhone 12 Pro Max (128GB) - Pacific Blue',
+  'New Apple iPhone 12 (128GB) - Blue',
+  'OnePlus Nord 5G (Blue Marble, 12GB RAM, 256GB Storage)',
+  'New Apple iPhone 12 Pro (128GB) - Pacific Blue',
+  'New Apple iPhone 12 Mini (64GB) - White',
+  'Apple iPhone 11 Pro Max (256GB) - Midnight Green',
+  'Apple iPhone 11 Pro (256GB) - Silver',
+  'Oppo A52 (Twilight Black, 6GB RAM, 128GB Storage) with No Cost EMI/Additional Exchange Offers',
+  'Samsung Galaxy M31 (Ocean Blue, 6GB RAM, 128GB Storage)',
+  'Nillkin Case for Apple iPhone 12 Mini (5.4" Inch) Super Frosted Shield Pro Magnetic Hard Back Soft Border (PC + TPU) Cover Raised Bezel Camera Protect with Logo Cut Blue',
+  'Nillkin Case for Apple iPhone 12 Mini (5.4" Inch) Medley Case Military Grade Finish (PC + TPU) Built in Stand (Removable) Raised Bezel for Camera Protect Blue',
+  'OnePlus 9 Pro 5G (Morning Mist, 12GB RAM, 256GB Storage)',
+  'Nillkin Case for Apple iPhone 12 Pro Max (6.7" Inch) Super Frosted Shield Pro Magnetic Hard Back Soft Border (PC + TPU) Cover Raised Bezel Camera Protect with Logo Cut Blue',
+  'Nillkin Case for Apple iPhone 12 Pro Max (6.7" Inch) Aoge Leather 360 Protection Elite Business Case with Soft Microfiber Lining & Internal Card Slot Blue',
+  'Nillkin Case for Apple iPhone 12 Pro Max (6.7" Inch) Super Frosted Shield Pro Magnetic Hard Back Soft Border (PC + TPU) Cover Raised Bezel Camera Protect with Logo Cut Black'],
+ 'rule_jy0c': ['24,410',
+  '491',
+  '1,733',
+  '61,235',
+  '205',
+  '1,516',
+  '744',
+  '855',
+  '8,836',
+  '171,526',
+  '720']}
+​
+### save the grouped data into readable or custom column Names 
+scraper.set_rule_aliases({'rule_ps8v':'Title','rule_mlov':'Price', 'rule_jy0c':'Ratings'})
+​
+scraper.keep_rules(['rule_ps8v','rule_mlov','rule_jy0c'])
+scraper.save('amazon-autoscarper')
+​
+​
+###  Comparitively scrape similar kind of other products  
+results=scraper.get_result_similar('https://www.amazon.in/s?k=redmi&ref=nb_sb_noss_2',group_by_alias=True)
+"""
+# try to print lists- items in columns wise , title , price and ratings for each row (row-wise) for tablulation results
+​
+#print(results['Title'] )
+#print(results['Price'])
+#print(results['Ratings'])
+​
+#printing all results lists values row by row 
+#for i,j,k in zip(results['Title'],results['Price'],results['Ratings']):
+   # print(i,j,k)
+    
+#for row in results['Title']+results['Price']+results['Ratings'] :
+    #print(row)
+"""
+    
+# for sequential lists printing itertools.chain
+# for coulmn wise lists printing itertools.izip
+import itertools
+​
+​
+for row in itertools.zip_longest(results['Title'],"=",results['Price'],"*", results['Ratings']):
+    print(*row,end=" \n ")
+Redmi 9 (Sky Blue, 4GB RAM, 64GB Storage) = ₹8,799 * 30,688 
+ Redmi 9A (Nature Green, 2GB Ram, 32GB Storage) | 2GHz Octa-core Helio G25 Processor None ₹10,999 None 35,425 
+ Redmi 9A (Sea Blue, 2GB Ram, 32GB Storage) | 2GHz Octa-core Helio G25 Processor None ₹6,799 None 35,425 
+ Redmi 9 Prime (Mint Green, 4GB RAM, 64GB Storage)- Full HD+ Display & AI Quad Camera None ₹8,499 None 33,731 
+ Redmi 9 Power (Blazing Blue, 4GB RAM, 64GB Storage) - 6000mAh Battery |FHD+ Screen| 48MP Quad Camera None ₹6,799 None 22,494 
+ Redmi 9A (Nature Green, 3GB Ram, 32GB Storage) | 2GHz Octa-core Helio G25 Processor None ₹8,499 None 35,425 
+ Redmi 9A (Sea Blue, 3GB Ram, 32GB Storage) | 2GHz Octa-core Helio G25 Processor None ₹9,999 None 35,425 
+ Redmi 9 (Carbon Black, 4GB RAM, 64GB Storage) None ₹11,999 None 30,688 
+ Redmi Note 9 Pro Max (Interstellar Black, 6GB RAM, 64GB Storage) - 64MP Quad Camera & Alexa Hands-Free Capable None ₹10,499 None 55,802 
+ Redmi 9A (Midnight Black, 2GB RAM, 32GB Storage) | 2GHz Octa-core Helio G25 Processor None ₹13,999 None 35,425 
+ Redmi 9 (Sporty Orange, 4GB RAM, 64GB Storage) None ₹7,499 None 30,688 
+ Redmi Note 9 (Pebble Grey, 4GB RAM 64GB Storage) - 48MP Quad Camera & Full HD+ Display | Extra INR 1000 Off on Exchange None ₹9,499 None 50,773 
+ Redmi 9 Prime (Matte Black, 4GB RAM, 64GB Storage) - Full HD+ Display & AI Quad Camera None ₹7,499 None 33,731 
+ Redmi Note 10 (Aqua Green, 6GB RAM, 128GB Storage) - Amoled Dot Display | 48MP Sony Sensor IMX582 | Snapdragon 678 Processor None ₹9,499 None 9,235 
+ Redmi Note 9 Shadow Black, 4GB RAM, 64GB Storage | Extra INR 1000 Off on Exchange None ₹8,799 None 50,773 
+ Redmi 9 Prime (Space Blue, 4GB RAM, 64GB Storage)- Full HD+ Display & AI Quad Camera None ₹10,999 None 33,731 
+ None None ₹14,999 None None 
+ None None ₹18,999 None None 
+ None None ₹6,799 None None 
+ None None ₹8,499 None None 
+ None None ₹8,799 None None 
+ None None ₹10,999 None None 
+ None None ₹10,999 None None 
+ None None ₹14,999 None None 
+ None None ₹9,999 None None 
+ None None ₹11,999 None None 
+ None None ₹13,999 None None 
+ None None ₹17,999 None None 
+ None None ₹10,999 None None 
+ None None ₹14,999 None None 
+ None None ₹9,999 None None 
+ None None ₹11,999 None None 
+ 
